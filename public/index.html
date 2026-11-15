@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roomfit: furniture that fits, read live</title>
+<style>
+  :root { --ink:#1f2a24; --muted:#5d6b62; --line:#d9dfd6; --bg:#f6f7f3; --card:#fff; --accent:#2f6b4f; --warn:#8a5a00; --changed:#fff4d6; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+  header { padding:20px 24px 8px; }
+  h1 { margin:0; font-size:22px; }
+  header p { margin:4px 0 0; color:var(--muted); }
+  main { display:grid; grid-template-columns:320px 1fr; gap:20px; padding:12px 24px 40px; align-items:start; }
+  @media (max-width: 860px) { main { grid-template-columns:1fr; } }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .panel h2 { margin:0 0 10px; font-size:15px; }
+  label { display:block; font-size:13px; color:var(--muted); margin-bottom:10px; }
+  input, select { display:block; width:100%; margin-top:3px; padding:8px 9px; font:inherit; border:1px solid var(--line); border-radius:7px; background:#fff; color:var(--ink); }
+  .row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  button { font:inherit; padding:8px 12px; border-radius:7px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+  button.quiet { background:#fff; color:var(--accent); }
+  button:disabled { opacity:.55; cursor:default; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .note { font-size:12.5px; color:var(--muted); margin:10px 0 0; }
+  .banner { padding:9px 12px; border-radius:8px; margin-bottom:12px; font-size:13.5px; }
+  .banner.warn { background:#fff4d6; color:var(--warn); border:1px solid #f0d58a; }
+  .banner.mock { background:#fde8e8; color:#8a1f1f; border:1px solid #f1b5b5; font-weight:600; }
+  #summary { font-weight:600; margin:0 0 4px; }
+  #detail { color:var(--muted); font-size:13px; margin:0 0 12px; }
+  .combo { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:12px; }
+  .combo-head { display:flex; justify-content:space-between; gap:10px; align-items:baseline; flex-wrap:wrap; }
+  .combo-head h3 { margin:0; font-size:15px; }
+  .spare { font-size:13px; color:var(--accent); font-weight:600; white-space:nowrap; }
+  svg.plan { width:100%; height:auto; margin:8px 0; }
+  .item { display:grid; grid-template-columns:56px 1fr; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
+  .item img, .item .ph { width:56px; height:56px; object-fit:contain; border-radius:6px; background:#eef1ea; display:block; }
+  .item a { color:var(--ink); font-weight:600; text-decoration:none; }
+  .item a:hover { text-decoration:underline; }
+  .item small { display:block; color:var(--muted); font-size:12.5px; }
+  .item small.live { color:var(--accent); }
+  .item small.changed { background:var(--changed); color:var(--warn); padding:1px 4px; border-radius:4px; display:inline-block; }
+  .combo-foot { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; font-size:13px; color:var(--muted); }
+  .empty { padding:22px; text-align:center; color:var(--muted); background:var(--card); border:1px dashed var(--line); border-radius:10px; }
+  #log { list-style:none; margin:0; padding:0; font-size:12.5px; max-height:260px; overflow:auto; }
+  #log li { padding:5px 0; border-top:1px solid var(--line); color:var(--muted); }
+  #log li.changed { color:var(--warn); font-weight:600; }
+  #log li:first-child { border-top:0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Roomfit</h1>
+  <p>Measure your corner once. Roomfit reads shop pages live through Context.dev and shows the furniture sets that fit.</p>
+</header>
+<main>
+  <section>
+    <form id="form" class="panel">
+      <h2>Your space</h2>
+      <div class="row">
+        <label>Width (cm)<input id="width" type="number" min="1" step="0.1" value="179" required></label>
+        <label>Depth (cm)<input id="depth" type="number" min="1" step="0.1" value="60" required></label>
+        <label>Gap (cm)<input id="gap" type="number" min="0" step="0.1" value="5" required></label>
+      </div>
+      <div id="slots"></div>
+      <div class="actions">
+        <button id="find" type="submit">Find combinations</button>
+        <button id="add" type="button" class="quiet">+ Add item</button>
+      </div>
+      <p class="note">Items stand side by side along one straight wall. Allow extra room for doors, drawers and skirting boards. Changing the size recalculates instantly from the pages already read.</p>
+    </form>
+    <div class="panel" style="margin-top:14px">
+      <h2>Change log</h2>
+      <ul id="log"><li>Nothing re-checked yet.</li></ul>
+    </div>
+  </section>
+  <section>
+    <div id="banners"></div>
+    <p id="summary"></p>
+    <p id="detail"></p>
+    <div id="results"><div class="empty">Choose what you need and select Find combinations.</div></div>
+  </section>
+</main>
+<script type="module" src="./app.mjs"></script>
+</body>
+</html>

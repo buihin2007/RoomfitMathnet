@@ -1,0 +1,13 @@
+{
+  "name": "roomfit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Furniture combinations that fit your corner, read live from shop pages with Context.dev",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.mjs",
+    "mock": "MOCK=1 node server.mjs",
+    "test": "node --test"
+  }
+}

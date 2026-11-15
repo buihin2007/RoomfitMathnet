@@ -20,6 +20,14 @@ node --test               # fit algorithm tests
 MOCK=1 node server.mjs    # UI with invented data, no API calls (clearly labelled)
 ```
 
+## Deploy to Vercel
+
+1. Push this folder to GitHub.
+2. On vercel.com: Add New, Project, import the repo. Framework preset: Other. No build command.
+3. Settings, Environment Variables: add `CONTEXT_DEV_API_KEY`, then Redeploy.
+
+`public/` is served as static files, `api/search.js`, `api/recheck.js` and `api/health.js` run as functions (60 s max, see `vercel.json`). The local server and the functions share `lib/core.js`.
+
 ## How it works
 
 1. Search: `POST /v1/web/search` per furniture type, Finnish market, limited to a list of furniture shops.
@@ -47,7 +55,9 @@ MOCK=1 node server.mjs    # UI with invented data, no API calls (clearly labelle
 ## Files
 
 ```
-server.mjs          API routes, Context.dev client, normalisation
+server.mjs          local server
+lib/core.js         Context.dev client, normalisation, API handlers
+api/*.js            Vercel functions
 public/fit.mjs      pure fit algorithm, shared by browser and tests
 public/app.mjs      UI, re-check, watch, change log
 public/index.html   page and styles

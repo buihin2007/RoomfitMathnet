@@ -1,0 +1,7 @@
+{
+  "outputDirectory": "public",
+  "functions": {
+    "api/search.js": { "maxDuration": 60 },
+    "api/recheck.js": { "maxDuration": 60 }
+  }
+}
